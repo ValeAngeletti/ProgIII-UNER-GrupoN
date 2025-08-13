@@ -13,3 +13,4 @@ const tiendaMusica = [
 
 console.log("Tienda de Articulos Musicales:")
 console.log(tiendaMusica);
+module.exports = { tiendaMusica };
