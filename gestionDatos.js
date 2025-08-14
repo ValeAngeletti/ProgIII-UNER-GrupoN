@@ -46,3 +46,12 @@ console.log("Array completo:", tiendaMusica);
 const elementoEliminadoShift = tiendaMusica.shift();
 console.log("\n4.4 - Elemento eliminado con shift():", elementoEliminadoShift);
 console.log("Array después de shift():", tiendaMusica);
+// 6. Ordenamiento (Integrante 6)
+const productsOrdenados = [...tiendaMusica].sort((a, b) => b.precio - a.precio);
+
+console.log("\n--- Productos ordenados por precio (de mayor a menor) ---");
+console.log(productsOrdenados);
+
+// Verificación: Array original no modificado
+console.log("\nArray original:");
+console.log(tiendaMusica);
