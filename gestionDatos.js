@@ -19,35 +19,30 @@ console.log("\nCantidad de productos en la tienda:", tiendaMusica.length);
 console.log("Segundo producto:", tiendaMusica[1].producto);
 console.log("Cuarto producto:", tiendaMusica[3].producto);
 
-// 4.1 - push(): Agregar 2 productos al final
+// 4. Manipulación básica de arrays (solo operaciones críticas)
+console.log("\n--- Punto 4: Manipulación de Arrays ---");
+
+// Array original (antes de cambios)
+console.log("Array inicial:", tiendaMusica);
+
+// 4.1 - Agregar 2 elementos al final con push()
 tiendaMusica.push(
-    { id: 6, producto: "Amplificador", precio: 50000, stock: 25 },
-    { id: 7, producto: "Pedal", precio: 10000, stock: 7 }
+    { id: 11, producto: "Metrónomo Digital", precio: 4500, stock: 12 },
+    { id: 12, producto: "Cable de Audio", precio: 2500, stock: 100 }
 );
+console.log("\n4.1 - Después de push():", tiendaMusica.slice(-2)); // Muestra los nuevos elementos
 
-// 4.2 - pop(): Eliminar el último producto
-const eliminadoConPop = tiendaMusica.pop();
+// 4.2 - Eliminar último elemento con pop()
+const elementoEliminadoPop = tiendaMusica.pop();
+console.log("\n4.2 - Elemento eliminado con pop():", elementoEliminadoPop);
+console.log("Array después de pop():", tiendaMusica);
 
-// 4.3 - unshift(): Agregar 1 producto al inicio
-tiendaMusica.unshift({ id: 0, producto: "Púa", precio: 200, stock: 200 });
+// 4.3 - Agregar 1 elemento al inicio con unshift()
+tiendaMusica.unshift({ id: 0, producto: "Púa para Guitarra", precio: 200, stock: 200 });
+console.log("\n4.3 - Después de unshift():", tiendaMusica[0]); // Muestra el nuevo primer elemento
+console.log("Array completo:", tiendaMusica);
 
-// 4.4 - shift(): Eliminar el primer producto
-const eliminadoConShift = tiendaMusica.shift();
-
-// 4.5 - filter(): Productos con stock > 0
-const conStock = tiendaMusica.filter(p => p.stock > 0);
-
-// 4.6 - map(): Array solo con nombres
-const nombres = tiendaMusica.map(p => p.producto);
-
-// 4.7 - find(): Buscar producto por id
-const productoId3 = tiendaMusica.find(p => p.id === 3);
-
-// 4.8 - sort(): Ordenar por precio (descendente)
-const ordenados = [...tiendaMusica].sort((a, b) => b.precio - a.precio);
-
-// Ver resultados 
-console.log("Productos con stock:", conStock);
-console.log("Nombres de productos:", nombres);
-console.log("Producto con id 3:", productoId3 || "No existe");
-console.log("Productos ordenados por precio:", ordenados);
+// 4.4 - Eliminar primer elemento con shift()
+const elementoEliminadoShift = tiendaMusica.shift();
+console.log("\n4.4 - Elemento eliminado con shift():", elementoEliminadoShift);
+console.log("Array después de shift():", tiendaMusica);
