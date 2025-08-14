@@ -13,3 +13,8 @@ const tiendaMusica = [
 
 console.log("Tienda de Articulos Musicales:")
 console.log(tiendaMusica);
+
+console.log("\nCantidad de productos en la tienda:", tiendaMusica.length);
+
+console.log("Segundo producto:", tiendaMusica[1].producto);
+console.log("Cuarto producto:", tiendaMusica[3].producto);
