@@ -1,3 +1,5 @@
+
+//1. Configuración Inicial:
 const tiendaMusica = [
     { id: 1, producto: "Guitarra Eléctrica", precio: 20000, stock: 10, color: "Negro" },
     { id: 2, producto: "Batería Acústica", precio: 450000, stock: 5, color: "Metálico" },
@@ -8,9 +10,9 @@ const tiendaMusica = [
     { id: 7, producto: "Pedal de Efectos", precio: 10000, stock: 7, color: "Negro" },
     { id: 8, producto: "Cuerdas para Guitarra", precio: 3000, stock: 50, color: "Neutro" },
     { id: 9, producto: "Atril para Partituras", precio: 5000, stock: 40, color: "Metálico" },
-    { id: 10, producto: "Soporte para Batería", precio: 120000, stock: 3, color: "Neutro" },
+    { id: 10,producto: "Soporte para Batería", precio: 120000, stock: 3, color: "Neutro" },
 ]
-
+//2. Operaciones Básicas y Acceso:
 console.log("Tienda de Articulos Musicales:")
 console.log(tiendaMusica);
 
@@ -19,6 +21,23 @@ console.log("\nCantidad de productos en la tienda:", tiendaMusica.length);
 console.log("Segundo producto:", tiendaMusica[1].producto);
 console.log("Cuarto producto:", tiendaMusica[3].producto);
 
+//3 Recorrido del Array:
+/**
+1. Recorrer el array productos utilizando un bucle for...of e imprimir el nombre y el precio de cada
+elemento.
+2. Recorre el array productos utilizando el método forEach() e imprimir la misma información que en el
+punto anterior, pero agregando una frase descriptiva (ej. "Producto: [nombre], Precio: [precio]").**/ 
+
+console.log("🟢 Recorrido de productos con for...of para mostrar Nombre del producto y su precio: ");
+for (let producto of tiendaMusica ){
+    console.log(`Producto: ${producto.producto}, Precio: ${producto.precio}`);
+}
+
+console.log("🔵 Recorrido de productos con forEach() para mostrar Nombre del producto y su precio: ");
+tiendaMusica.forEach(producto => {
+    console.log(`Nombre de producto: ${producto.producto}, Precio: ${producto.precio}`);
+});
+//4. Manipulación de Arrays:
 // 4. Manipulación básica de arrays (solo operaciones críticas)
 console.log("\n--- Punto 4: Manipulación de Arrays ---");
 
@@ -55,3 +74,6 @@ console.log(productsOrdenados);
 // Verificación: Array original no modificado
 console.log("\nArray original:");
 console.log(tiendaMusica);
+
+
+
