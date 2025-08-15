@@ -1,0 +1,14 @@
+# Archivos temporales de editores
+*.swp
+*.swo
+*~
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dependencias de Node.js (si las hay)
+node_modules/
