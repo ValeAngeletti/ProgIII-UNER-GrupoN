@@ -60,6 +60,21 @@ async function getProductoPorId(id) {
     }
 
 }
+// +++ ACa va la funcion para agregar producto a la API usando el metodo POST +++
+async function agregarNuevoProducto(nuevoProducto) {
+    try {
+        const respuesta = await fetch(API_URL, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevoProducto)
+        });
+        const productoAgregado = await respuesta.json();
+        console.log("\n---✅ Producto agregado exitosamente en la API ✅---");
+        console.log(productoAgregado);
+    } catch (error) {
+        console.error("\nError al agregar el nuevo producto:", error);
+    }
+}
 
 // Si no se pasa argumento nos muestra todos los datos
 // Si se pasa numero nos trae esa cantidad y guarda en el JSON
@@ -105,9 +120,25 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                 });
                 break;
             case 3:
-                console.log("\n-- AGREGAR UN NUEVO PRODUCTO --");
-                entrada.close();
-                console.log("\n---- Saliendo ... ----");
+                // +++ LÓGICA PARA AGGREGAR PDUCTO AA LA APAI CON POST LLAMANDO A LA FUNCION AGREGARNUEVOPRODUCTO PARA EL CASO 3 +++
+                console.log("\n--📢AGREGAR UN NUEVO PRODUCTO📢A--");
+                const nuevoProducto = {};
+                entrada.question("🧑‍💻Título del producto: ", (title) => {
+                    nuevoProducto.title = title;
+                    entrada.question("💸Precio del producto: ", (price) => {
+                        nuevoProducto.price = parseFloat(price);
+                        entrada.question("✍️Descripción del producto: ", (description) => {
+                            nuevoProducto.description = description;
+                            // Asignamos valores por defecto para los campos restantes
+                            nuevoProducto.image = 'https://via.placeholder.com/150';
+                            nuevoProducto.category = 'general';
+                            agregarNuevoProducto(nuevoProducto).then(() => {
+                                entrada.close();
+                                console.log("\n----🙋 Saliendo ... ----");
+                            });
+                        });
+                    });
+                });
                 break;
             case 4:
                 console.log("\n-- BUSCAR PRODUCTO POR ID --");
