@@ -60,6 +60,21 @@ async function getProductoPorId(id) {
     }
 
 }
+// +++ ACa va la funcion para agregar producto a la API usando el metodo POST +++
+async function agregarNuevoProducto(nuevoProducto) {
+    try {
+        const respuesta = await fetch(API_URL, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevoProducto)
+        });
+        const productoAgregado = await respuesta.json();
+        console.log("\n---✅ Producto agregado exitosamente en la API ✅---");
+        console.log(productoAgregado);
+    } catch (error) {
+        console.error("\nError al agregar el nuevo producto:", error);
+    }
+}
 
 // Si no se pasa argumento nos muestra todos los datos
 // Si se pasa numero nos trae esa cantidad y guarda en el JSON
@@ -112,6 +127,31 @@ async function eliminarProductosCaros(precioMax) {
 }
 
 
+=======
+// Eliminar producto por ID ----
+async function deleteProduct(id) {
+    try {
+        if (Number.isNaN(id) || id <= 0) {
+            throw new Error("El ID debe ser un número válido mayor que 0");
+        }
+
+        const respuesta = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+
+        if (!respuesta.ok) {
+            throw new Error(`No se pudo eliminar el producto con ID ${id}`);
+        }
+
+        const productoEliminado = await respuesta.json();
+
+        console.log(`\n✅ Producto eliminado con éxito (ID: ${id})`);
+        console.log("Información del producto borrado:", productoEliminado);
+
+    } catch (error) {
+        console.error("\n❌ Error al eliminar el producto:", error.message);
+    }
+}
+
+
 const entradaDeUsuario = require("readline");
 
 console.log("\n---- MENÚ DE ACCIONES ----")
@@ -153,9 +193,25 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                 });
                 break;
             case 3:
-                console.log("\n-- AGREGAR UN NUEVO PRODUCTO --");
-                entrada.close();
-                console.log("\n---- Saliendo ... ----");
+                // +++ LÓGICA PARA AGGREGAR PDUCTO AA LA APAI CON POST LLAMANDO A LA FUNCION AGREGARNUEVOPRODUCTO PARA EL CASO 3 +++
+                console.log("\n--📢AGREGAR UN NUEVO PRODUCTO📢A--");
+                const nuevoProducto = {};
+                entrada.question("🧑‍💻Título del producto: ", (title) => {
+                    nuevoProducto.title = title;
+                    entrada.question("💸Precio del producto: ", (price) => {
+                        nuevoProducto.price = parseFloat(price);
+                        entrada.question("✍️Descripción del producto: ", (description) => {
+                            nuevoProducto.description = description;
+                            // Asignamos valores por defecto para los campos restantes
+                            nuevoProducto.image = 'https://via.placeholder.com/150';
+                            nuevoProducto.category = 'general';
+                            agregarNuevoProducto(nuevoProducto).then(() => {
+                                entrada.close();
+                                console.log("\n----🙋 Saliendo ... ----");
+                            });
+                        });
+                    });
+                });
                 break;
             case 4:
                 console.log("\n-- BUSCAR PRODUCTO POR ID --");
@@ -167,10 +223,14 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                 })
                 break;
             case 5:
-                console.log("\n-- ELIMINAR UN PRODUCTO --");
-                entrada.close();
-                console.log("\n---- Saliendo ... ----");
-                break;
+    console.log("\n-- ELIMINAR UN PRODUCTO --");
+    entrada.question("\nIngrese el ID del producto a eliminar: ", (id) => {
+        deleteProduct(Number(id)).then(() => {
+            entrada.close();
+            console.log("\n---- Saliendo ... ----");
+        })
+    });
+    break;
             case 6:
                 console.log("\n-- MODIFICAR UN PRODUCTO --");
             
