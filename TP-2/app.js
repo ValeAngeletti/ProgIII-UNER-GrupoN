@@ -131,7 +131,6 @@ async function obtenerUltimoIdLocal() {
     }
 }
 
-
 // Eliminar productos caros del archivo local
 async function eliminarProductosCaros(precioMax) {
     try {
