@@ -60,7 +60,7 @@ async function getProductoPorId(id) {
     }
 
 }
-// +++ ACa va la funcion para agregar producto a la API usando el metodo POST +++
+// Agregar producto a la API 
 async function agregarNuevoProducto(nuevoProducto) {
     try {
         const respuesta = await fetch(API_URL, {
@@ -69,17 +69,15 @@ async function agregarNuevoProducto(nuevoProducto) {
             body: JSON.stringify(nuevoProducto)
         });
         const productoAgregado = await respuesta.json();
-        console.log("\n---✅ Producto agregado exitosamente en la API ✅---");
+        console.log("\n--- Producto agregado exitosamente en la API ---");
         console.log(productoAgregado);
     } catch (error) {
         console.error("\nError al agregar el nuevo producto:", error);
     }
 }
 
-// Si no se pasa argumento nos muestra todos los datos
-// Si se pasa numero nos trae esa cantidad y guarda en el JSON
 
-// 🔁 Actualizar un producto en la API
+// Actualizar un producto en la API
 async function actualizarProductoEnAPI(id, nuevosDatos) {
     try {
         const respuesta = await fetch(`${API_URL}/${id}`, {
@@ -91,14 +89,14 @@ async function actualizarProductoEnAPI(id, nuevosDatos) {
         });
 
         const data = await respuesta.json();
-        console.log("\n✅ Producto actualizado en la API:");
+        console.log("\nProducto actualizado en la API: ");
         console.log(data);
     } catch (error) {
-        console.error("\n❌ Error al actualizar el producto:", error.message);
+        console.error("\nError al actualizar el producto: ", error.message);
     }
 }
 
-// ➕ Agregar producto manualmente al archivo local
+//Agregar producto manualmente al archivo local
 async function agregarProductoLocal(productoNuevo) {
     try {
         const ruta = "data/products.json";
@@ -106,13 +104,35 @@ async function agregarProductoLocal(productoNuevo) {
         const productos = JSON.parse(contenido);
         productos.push(productoNuevo);
         await fs.writeFile(ruta, JSON.stringify(productos, null, 2));
-        console.log("\n✅ Producto agregado al archivo local.");
+        console.log("\nProducto agregado al archivo local.");
     } catch (error) {
-        console.error("\n❌ Error al agregar producto localmente:", error.message);
+        console.error("\nError al agregar producto localmente: ", error.message);
     }
 }
 
-// 🗑️ Eliminar productos caros del archivo local
+async function obtenerUltimoIdLocal() {
+    try {
+        const ruta = "data/products.json";
+        const contenido = await fs.readFile(ruta, "utf-8");
+        const productos = JSON.parse(contenido);
+
+        if (productos.length === 0) {
+            return 0;
+        }
+
+        // Buscando el id más alto
+        const ids = productos.map(p => p.id);
+        const ultimoId = Math.max(...ids);
+
+        return ultimoId;
+    } catch (error) {
+        console.error("\nError al leer el archivo local:", error.message);
+        return 0;
+    }
+}
+
+
+// Eliminar productos caros del archivo local
 async function eliminarProductosCaros(precioMax) {
     try {
         const ruta = "data/products.json";
@@ -120,14 +140,12 @@ async function eliminarProductosCaros(precioMax) {
         const productos = JSON.parse(contenido);
         const filtrados = productos.filter(p => p.price <= precioMax);
         await fs.writeFile(ruta, JSON.stringify(filtrados, null, 2));
-        console.log(`\n✅ Productos con precio mayor a $${precioMax} eliminados del archivo local.`);
+        console.log(`\nProductos con precio mayor a $${precioMax} eliminados del archivo local.`);
     } catch (error) {
-        console.error("\n❌ Error al eliminar productos caros:", error.message);
+        console.error("\nError al eliminar productos caros: ", error.message);
     }
 }
 
-
-=======
 // Eliminar producto por ID ----
 async function deleteProduct(id) {
     try {
@@ -143,11 +161,11 @@ async function deleteProduct(id) {
 
         const productoEliminado = await respuesta.json();
 
-        console.log(`\n✅ Producto eliminado con éxito (ID: ${id})`);
-        console.log("Información del producto borrado:", productoEliminado);
+        console.log(`\n-- Producto eliminado con éxito (ID: ${id})`);
+        console.log("\nInformación del producto borrado:", productoEliminado);
 
     } catch (error) {
-        console.error("\n❌ Error al eliminar el producto:", error.message);
+        console.error("\nError al eliminar el producto: ", error.message);
     }
 }
 
@@ -193,21 +211,21 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                 });
                 break;
             case 3:
-                // +++ LÓGICA PARA AGGREGAR PDUCTO AA LA APAI CON POST LLAMANDO A LA FUNCION AGREGARNUEVOPRODUCTO PARA EL CASO 3 +++
-                console.log("\n--📢AGREGAR UN NUEVO PRODUCTO📢A--");
+                // +++ LÓGICA PARA AGREGAR PRODUCTO A LA API 
+                console.log("\n-- AGREGAR UN NUEVO PRODUCTO --");
                 const nuevoProducto = {};
-                entrada.question("🧑‍💻Título del producto: ", (title) => {
+                entrada.question("Título del producto: ", (title) => {
                     nuevoProducto.title = title;
-                    entrada.question("💸Precio del producto: ", (price) => {
+                    entrada.question("Precio del producto: $", (price) => {
                         nuevoProducto.price = parseFloat(price);
-                        entrada.question("✍️Descripción del producto: ", (description) => {
+                        entrada.question("Descripción del producto: ", (description) => {
                             nuevoProducto.description = description;
-                            // Asignamos valores por defecto para los campos restantes
+                            //valores por defecto para los campos restantes
                             nuevoProducto.image = 'https://via.placeholder.com/150';
                             nuevoProducto.category = 'general';
                             agregarNuevoProducto(nuevoProducto).then(() => {
                                 entrada.close();
-                                console.log("\n----🙋 Saliendo ... ----");
+                                console.log("\n---- Saliendo ... ----");
                             });
                         });
                     });
@@ -223,28 +241,28 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                 })
                 break;
             case 5:
-    console.log("\n-- ELIMINAR UN PRODUCTO --");
-    entrada.question("\nIngrese el ID del producto a eliminar: ", (id) => {
-        deleteProduct(Number(id)).then(() => {
-            entrada.close();
-            console.log("\n---- Saliendo ... ----");
-        })
-    });
-    break;
+                console.log("\n-- ELIMINAR UN PRODUCTO --");
+                entrada.question("\nIngrese el ID del producto a eliminar: ", (id) => {
+                    deleteProduct(Number(id)).then(() => {
+                        entrada.close();
+                        console.log("\n---- Saliendo ... ----");
+                    })
+                });
+                break;
             case 6:
                 console.log("\n-- MODIFICAR UN PRODUCTO --");
-            
+
                 console.log("\nAcciones disponibles:");
                 console.log("1. Actualizar un producto en la API");
                 console.log("2. Agregar un producto manual al archivo local");
                 console.log("3. Eliminar productos con precio mayor a X del archivo local");
-            
+
                 entrada.question("\nSeleccione una subopción: ", (subop) => {
                     switch (subop) {
                         case "1":
                             entrada.question("\nIngrese el ID del producto a actualizar: ", (id) => {
                                 entrada.question("Nuevo título: ", (title) => {
-                                    entrada.question("Nuevo precio: ", (price) => {
+                                    entrada.question("Nuevo precio: $", (price) => {
                                         actualizarProductoEnAPI(id, {
                                             title,
                                             price: parseFloat(price)
@@ -256,13 +274,16 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                                 });
                             });
                             break;
-            
+
                         case "2":
-                            entrada.question("\nID del nuevo producto: ", (id) => {
+                            obtenerUltimoIdLocal().then((ultimoId) => {
+                                const nuevoId = ultimoId + 1;
+                                console.log(`\nProducto nuevo - ID = ${nuevoId}`);
+
                                 entrada.question("Título: ", (title) => {
-                                    entrada.question("Precio: ", (price) => {
+                                    entrada.question("Precio: $", (price) => {
                                         const producto = {
-                                            id: parseInt(id),
+                                            id: nuevoId,
                                             title,
                                             price: parseFloat(price),
                                             description: "Agregado manualmente",
@@ -278,7 +299,7 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                                 });
                             });
                             break;
-            
+
                         case "3":
                             entrada.question("\nEliminar productos con precio mayor a: $", (valor) => {
                                 eliminarProductosCaros(parseFloat(valor)).then(() => {
@@ -287,7 +308,7 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                                 });
                             });
                             break;
-            
+
                         default:
                             console.log("\nOpción inválida.");
                             entrada.close();
