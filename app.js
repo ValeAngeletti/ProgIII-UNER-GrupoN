@@ -79,6 +79,29 @@ async function agregarNuevoProducto(nuevoProducto) {
 // Si no se pasa argumento nos muestra todos los datos
 // Si se pasa numero nos trae esa cantidad y guarda en el JSON
 
+// Eliminar producto por ID ----
+async function deleteProduct(id) {
+    try {
+        if (Number.isNaN(id) || id <= 0) {
+            throw new Error("El ID debe ser un número válido mayor que 0");
+        }
+
+        const respuesta = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+
+        if (!respuesta.ok) {
+            throw new Error(`No se pudo eliminar el producto con ID ${id}`);
+        }
+
+        const productoEliminado = await respuesta.json();
+
+        console.log(`\n✅ Producto eliminado con éxito (ID: ${id})`);
+        console.log("Información del producto borrado:", productoEliminado);
+
+    } catch (error) {
+        console.error("\n❌ Error al eliminar el producto:", error.message);
+    }
+}
+
 const entradaDeUsuario = require("readline");
 
 console.log("\n---- MENÚ DE ACCIONES ----")
@@ -150,10 +173,14 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
                 })
                 break;
             case 5:
-                console.log("\n-- ELIMINAR UN PRODUCTO --");
-                entrada.close();
-                console.log("\n---- Saliendo ... ----");
-                break;
+    console.log("\n-- ELIMINAR UN PRODUCTO --");
+    entrada.question("\nIngrese el ID del producto a eliminar: ", (id) => {
+        deleteProduct(Number(id)).then(() => {
+            entrada.close();
+            console.log("\n---- Saliendo ... ----");
+        })
+    });
+    break;
             case 6:
                 console.log("\n-- MODIFICAR UN PRODUCTO --");
                 entrada.close();
