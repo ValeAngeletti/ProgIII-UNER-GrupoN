@@ -79,6 +79,55 @@ async function agregarNuevoProducto(nuevoProducto) {
 // Si no se pasa argumento nos muestra todos los datos
 // Si se pasa numero nos trae esa cantidad y guarda en el JSON
 
+// 🔁 Actualizar un producto en la API
+async function actualizarProductoEnAPI(id, nuevosDatos) {
+    try {
+        const respuesta = await fetch(`${API_URL}/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(nuevosDatos),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await respuesta.json();
+        console.log("\n✅ Producto actualizado en la API:");
+        console.log(data);
+    } catch (error) {
+        console.error("\n❌ Error al actualizar el producto:", error.message);
+    }
+}
+
+// ➕ Agregar producto manualmente al archivo local
+async function agregarProductoLocal(productoNuevo) {
+    try {
+        const ruta = "data/products.json";
+        const contenido = await fs.readFile(ruta, "utf-8");
+        const productos = JSON.parse(contenido);
+        productos.push(productoNuevo);
+        await fs.writeFile(ruta, JSON.stringify(productos, null, 2));
+        console.log("\n✅ Producto agregado al archivo local.");
+    } catch (error) {
+        console.error("\n❌ Error al agregar producto localmente:", error.message);
+    }
+}
+
+// 🗑️ Eliminar productos caros del archivo local
+async function eliminarProductosCaros(precioMax) {
+    try {
+        const ruta = "data/products.json";
+        const contenido = await fs.readFile(ruta, "utf-8");
+        const productos = JSON.parse(contenido);
+        const filtrados = productos.filter(p => p.price <= precioMax);
+        await fs.writeFile(ruta, JSON.stringify(filtrados, null, 2));
+        console.log(`\n✅ Productos con precio mayor a $${precioMax} eliminados del archivo local.`);
+    } catch (error) {
+        console.error("\n❌ Error al eliminar productos caros:", error.message);
+    }
+}
+
+
+=======
 // Eliminar producto por ID ----
 async function deleteProduct(id) {
     try {
@@ -101,6 +150,7 @@ async function deleteProduct(id) {
         console.error("\n❌ Error al eliminar el producto:", error.message);
     }
 }
+
 
 const entradaDeUsuario = require("readline");
 
@@ -183,9 +233,69 @@ entrada.question("Ingrese una opción: ", (respuesta) => {
     break;
             case 6:
                 console.log("\n-- MODIFICAR UN PRODUCTO --");
-                entrada.close();
-                console.log("\n---- Saliendo ... ----");
+            
+                console.log("\nAcciones disponibles:");
+                console.log("1. Actualizar un producto en la API");
+                console.log("2. Agregar un producto manual al archivo local");
+                console.log("3. Eliminar productos con precio mayor a X del archivo local");
+            
+                entrada.question("\nSeleccione una subopción: ", (subop) => {
+                    switch (subop) {
+                        case "1":
+                            entrada.question("\nIngrese el ID del producto a actualizar: ", (id) => {
+                                entrada.question("Nuevo título: ", (title) => {
+                                    entrada.question("Nuevo precio: ", (price) => {
+                                        actualizarProductoEnAPI(id, {
+                                            title,
+                                            price: parseFloat(price)
+                                        }).then(() => {
+                                            entrada.close();
+                                            console.log("\n---- Saliendo ... ----");
+                                        });
+                                    });
+                                });
+                            });
+                            break;
+            
+                        case "2":
+                            entrada.question("\nID del nuevo producto: ", (id) => {
+                                entrada.question("Título: ", (title) => {
+                                    entrada.question("Precio: ", (price) => {
+                                        const producto = {
+                                            id: parseInt(id),
+                                            title,
+                                            price: parseFloat(price),
+                                            description: "Agregado manualmente",
+                                            category: "manual",
+                                            image: "",
+                                            rating: { rate: 0, count: 0 }
+                                        };
+                                        agregarProductoLocal(producto).then(() => {
+                                            entrada.close();
+                                            console.log("\n---- Saliendo ... ----");
+                                        });
+                                    });
+                                });
+                            });
+                            break;
+            
+                        case "3":
+                            entrada.question("\nEliminar productos con precio mayor a: $", (valor) => {
+                                eliminarProductosCaros(parseFloat(valor)).then(() => {
+                                    entrada.close();
+                                    console.log("\n---- Saliendo ... ----");
+                                });
+                            });
+                            break;
+            
+                        default:
+                            console.log("\nOpción inválida.");
+                            entrada.close();
+                            console.log("\n---- Saliendo ... ----");
+                    }
+                });
                 break;
+
             default:
                 console.log("\n-- Opción inválida --")
                 entrada.close();
